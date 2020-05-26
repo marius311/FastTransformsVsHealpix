@@ -11,8 +11,9 @@ T = Float64
 
 timings = map([128,256,512,1024,2048]) do healpix_nside
 
-    nθ = 4*healpix_nside
+    nθ = 2*healpix_nside
     nφ = 4*healpix_nside - 1
+    healpix_ℓmax = 2*healpix_nside
 
     # prep FastTransforms
     x2k  = plan_sph_analysis(T, nθ, nφ)
@@ -24,8 +25,8 @@ timings = map([128,256,512,1024,2048]) do healpix_nside
     ft_backward = @belapsed $k2x * ($lm2k * $(sphrandn(T, nθ, nφ)))
 
     # run Healpix
-    hpx_forward = @belapsed map2alm($(rand(12*healpix_nside^2)), ℓmax=4*$healpix_nside)
-    hpx_backward = @belapsed alm2map!(Array{T}(undef,12*$healpix_nside^2), $(randn(Complex{T}, 1, 4*healpix_nside+1, 4*healpix_nside+1)))
+    hpx_forward = @belapsed map2alm($(rand(12*healpix_nside^2)), ℓmax=$healpix_ℓmax)
+    hpx_backward = @belapsed alm2map!(Array{T}(undef,12*$healpix_nside^2), $(randn(Complex{T}, 1, healpix_ℓmax+1, healpix_ℓmax+1)))
 
     [healpix_nside, ft_forward, hpx_forward, ft_backward, hpx_backward]
 end
