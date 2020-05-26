@@ -20,8 +20,8 @@ timings = map([128,256,512,1024,2048]) do healpix_nside
     lm2k = plan_sph2fourier(T, nθ)
 
     # run FastTransforms
-    ft_forward = @belapsed $k2x * ($lm2k * $(sphrandn(T, nθ, nφ)))
-    ft_backward = @belapsed $lm2k \ ($x2k * $(randn(T, nθ, nφ))) 
+    ft_forward = @belapsed $lm2k \ ($x2k * $(randn(T, nθ, nφ))) 
+    ft_backward = @belapsed $k2x * ($lm2k * $(sphrandn(T, nθ, nφ)))
 
     # run Healpix
     hpx_forward = @belapsed map2alm($(rand(12*healpix_nside^2)), ℓmax=4*$healpix_nside)
