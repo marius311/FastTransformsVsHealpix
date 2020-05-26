@@ -3,9 +3,13 @@ pkg"activate ."
 using FastTransforms
 using BenchmarkTools
 using PrettyTables
+using UnPack
 include("healpix.jl")
 
-FastTransforms.set_num_threads(Sys.CPU_THREADS)
+# set threads
+@unpack OMP_NUM_THREADS, FT_NUM_THREADS = ENV
+@show OMP_NUM_THREADS FT_NUM_THREADS
+FastTransforms.set_num_threads(parse(Int,FT_NUM_THREADS))
 
 T = Float64
 
